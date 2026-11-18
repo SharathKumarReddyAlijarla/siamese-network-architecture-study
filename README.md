@@ -1,164 +1,140 @@
-# Recent Advancements in Machine Learning
-## Investigating the Impact of Architectural Variations on the Performance of Siamese Neural Networks
+# Siamese Neural-Network Architecture Study
 
-### Abstract
-Siamese Neural Networks (SNNs) have gained popularity due to their ability to
-compare and identify similarity between input data points. In this study, we investigate
-the impact of architecture details on the performance of Siamese Neural
-Networks. We explore various parameters that may differ in SNNs, such as the
-choice of neural network architectures (e.g., CNNs, MLPs), number of layers, neurons
-per layer, size of the output layer (i.e., final embedding), and hyperparameters
-(e.g., learning rate, weight initialization scheme). To support our findings, we also
-look into relevant literature. The results of this study will provide valuable insights
-into designing efficient and effective Siamese Neural Networks for similarity-based
-tasks.
-###  Introduction:
-Siamese Neural Networks (SNNs) are a popular approach for comparing and identifying similarities
-in data. They can learn complex patterns and excel in similarity-based tasks. In this study, we explore
-how different architectural details affect SNN performance. We consider factors like neural network
-architectures (e.g., CNNs, MLPs), layer numbers, neurons per layer, output layer size, learning rate,
-and weight initialization schemes.
-For our investigation, we use the well-known MNIST(3) database of handwritten digits. We randomly
-select subsets of 100 training images and 50 testing images.
-We have two neural network architectures, CNN and MLP, and we assess their performance using the
-binary cross-entropy loss function. Training is done on 100 images and testing on 50 images, with 10
-epochs and a batch size of 1024.
-Our performance analysis focuses on several aspects, including the impact of learning rate on accuracy
-and loss, the relationship between layer numbers and accuracies/losses, and the comparison of weight
-initialization methods (Glorot Uniform and He Uniform) for optimal results. We also compare
-MLP and CNN architectures to understand their strengths. Furthermore, we examine training versus
-validation accuracies to assess model generalization.
-In conclusion, this study aims to uncover insights into SNNs and their design choices for similaritybased
-tasks. By understanding SNN intricacies, we hope to advance machine learning and similaritybased
-applications.
-### Methodology:
-#### Selecting Architectural Parameters:
-- Different neural network architectures (CNN, MLP) are considered for SNN implementation.
-- The number of layers and neurons per layer are varied to create diverse architectural configurations.
-- Other relevant hyperparameters, including learning rate and weight initialization, are identified.
-#### Data Set:
-The MNIST(3) dataset is a well-known and widely used dataset in the field of machine learning and
-computer vision. It was created by modifying a larger dataset originally collected by the National
-Institute of Standards and Technology (NIST) in the United States.
-The MNIST(3) dataset consists of a large collection of grayscale images of handwritten digits from 0
-to 9. Each image is a 28x28 pixel square, representing a digit written by various individuals. The
-dataset is divided into two main sets: a training set with 60,000 images and a testing set with 10,000
-images.
-The MNIST(3) dataset has become a fundamental benchmark for testing and evaluating image
-classification algorithms, especially for tasks involving handwritten digit recognition. Its simplicity
-and easy accessibility have made it a standard dataset for researchers and practitioners to experiment
-with various machine learning and deep learning models.
-Over the years, MNIST(3) has played a crucial role in advancing the field of computer vision and has
-served as a starting point for many researchers to develop and validate their algorithms. Despite its
-relatively small size compared to more modern datasets, MNIST continues to be a valuable resource
-for learning and demonstrating image recognition techniques and has become a cornerstone in the
-development of new machine learning approaches.
-#### Neural Network Model:
+### Investigating how architecture, learning rate, depth, and initialization affect similarity learning on MNIST
 
-• Two architectures are used: CNN and MLP.
+## Overview
 
-• The binary cross-entropy loss function is employed.
+This academic project studies Siamese Neural Networks for image-pair similarity classification. It compares shared convolutional and multilayer-perceptron feature extractors while varying architectural depth, learning rate, and weight initialization.
 
-• Training is performed on 100 images, with testing conducted on 50 images.
+Pairs of MNIST digit images are labeled as similar when they represent the same digit and dissimilar otherwise. The shared feature extractor maps both images into embeddings, which are concatenated and passed to a binary classifier.
 
-• Batch size is set to 1024, and the models are trained for 10 epochs.
+## Features
 
-• Weight Initialisation: Glorot uniform, He uniform.
+- Siamese CNN and MLP implementations
+- Shared feature-extractor weights across image pairs
+- Programmatic similar/dissimilar pair generation
+- Comparison of learning rates
+- Comparison of Glorot and He initialization
+- Layer-depth experiments
+- Early stopping
+- Training and validation accuracy/loss analysis
+- Report, experimental notebooks, and spreadsheet results
 
-• Layers: 2 Input, Sequential Layer, Concatenate Layer, 2 or 3 Fixed Layers, Output Layer
+## Architecture
 
-• Metrics: Accuracy, Loss
+```mermaid
+flowchart LR
+    A[MNIST image A] --> C[Shared CNN or MLP encoder]
+    B[MNIST image B] --> C
+    C --> D[Embedding A]
+    C --> E[Embedding B]
+    D --> F[Concatenation]
+    E --> F
+    F --> G[Dense comparison head]
+    G --> H[Sigmoid similarity score]
+    H --> I[Binary cross-entropy and accuracy]
+```
 
-#### Performance Analysis:
+### CNN Experiment
 
-• The impact of learning rate on accuracy and loss is evaluated.
+The CNN notebook uses stacked convolution, batch-normalization, and ReLU blocks followed by global average pooling and a dense embedding layer.
 
-• The relationship between the number of layers and accuracies/losses is examined.
+### MLP Experiment
 
-• Different weight initialization methods (Glorot Uniform, He Uniform) are compared.
+The MLP notebook flattens each 28×28 image and applies shared dense/batch-normalization blocks before the comparison head.
 
-• The performance of MLP and CNN architectures is analyzed based on achieved accuracies
-and losses.
+## Experimental Design
 
-• Training vs. validation accuracies are compared to understand model generalization.
+- Dataset: MNIST handwritten digits
+- Training sample: 100 randomly selected images
+- Validation/test sample: 50 randomly selected images
+- Pair label: `1` for the same digit class, otherwise `0`
+- Training epochs: up to 10
+- Batch size: 1024
+- Loss: Binary cross-entropy
+- Optimizer: Adam
+- Primary metrics: Accuracy and loss
 
-### Results and Observations:
-All the outcomes achieved in various runs, involving different hyperparameters, architectures, and
-weight configurations, are recorded and stored in an Excel spreadsheet.
+All Cartesian image pairs are generated within each sampled partition, producing 10,000 training pairs and 2,500 validation pairs.
 
-Learning Rate: The ideal learning rate for achieving optimal accuracy is 0.001. Any deviations
-from this value result in decreased performance. Specifically, at a learning rate of 0.001, the average
-validation accuracy reaches its peak at 89.70 percent, while the validation loss reaches its lowest of
-0.2953. In comparison, using learning rates of 0.01 and 0.0001 yields inferior results
+## Project Structure
 
+```text
+.
+├── RAML.ipynb                 # Siamese CNN experiments
+├── raml2.ipynb                # Siamese MLP experiments
+├── ramlresults.xlsx           # Recorded experiment results
+├── RAML_Report_Sharath.pdf    # Academic report
+└── README.md
+```
 
-<img width="263" alt="learningrate" src="https://github.com/SharathKumarReddyAlijarla/RAML/assets/122915971/3665f0d8-3772-4629-9854-64df8fdfb7e1">
+## Setup
 
+Clone the repository and create an environment:
 
-Number of Layers: In my observations, the impact of the number of layers on neural network
-performance did not exhibit a consistent pattern. The decision regarding the appropriate number of
-layers to use depends on the complexity of the task being performed and the characteristics of the
-dataset being used. According to the obtained results, the performance of CNN remained relatively
-similar when using 6 and 7 layers. MLP, on the other hand, performed slightly better with 7 layers
-than with 6 layers.
+```bash
+git clone https://github.com/SharathKumarReddyAlijarla/Recent-Advancements-in-Machine-Learning.git
+cd Recent-Advancements-in-Machine-Learning
+python -m venv .venv
+```
 
-<img width="518" alt="Layers vs Accuracy   Losses" src="https://github.com/SharathKumarReddyAlijarla/RAML/assets/122915971/86f93ae0-7be9-41c6-88ed-b9b3836d56a8">
+Activate it, then install the notebook dependencies:
 
-Weight Initialization: HeUniform initialization outperforms GlorotUniform initialization in terms
-of both accuracy and loss.
+```bash
+python -m pip install tensorflow numpy matplotlib jupyter openpyxl
+```
 
-<img width="476" alt="weights" src="https://github.com/SharathKumarReddyAlijarla/RAML/assets/122915971/694aeac9-9d47-481f-89e8-cb7d0bff987e">
+Start Jupyter:
 
-Architecture: The MLP architecture demonstrates superior accuracy and lower loss compared to
-CNN on the MNIST dataset. Normally, CNN is expected to perform better for image data, but the
-unexpected performance of MLP might be because of the small size of the MNIST images, which are
-only 28x28 pixels.
+```bash
+jupyter notebook
+```
 
-<img width="471" alt="arch" src="https://github.com/SharathKumarReddyAlijarla/RAML/assets/122915971/393f03af-5026-4dd1-8756-94febc0c6555">
+## Usage
 
-Training vs. Validation Accuracies: Training accuracies are consistently higher than validation
-accuracies.
-### Related Work:
-• Spectrogram Classification Using Dissimilarity Space(1)
+1. Open `RAML.ipynb` for the convolutional Siamese network.
+2. Open `raml2.ipynb` for the MLP Siamese network.
+3. Run cells from top to bottom.
+4. Adjust learning rate, layer layout, or initializer for a new experiment.
+5. Record comparable results in `ramlresults.xlsx`.
 
-• Features for Multi-Target Multi-Camera Tracking and Re-Identification (2)
-### Code and Acknowledgement
-Website (Code is available at): https://github.com/SharathKumarReddyAlijarla
-This project was conducted under the guidance of Prof. Dr.-Ing. Joeran Beel as part of the academic
-course titled "Recent Advancements in Machine Learning."
-### Conclusion:
-Our findings reveal that the ideal learning rate for achieving optimal accuracy is 0.001, and deviations
-from this value result in decreased performance. Additionally, we observed that the number of layers
-did not follow a consistent trend in affecting the network’s performance, emphasizing the importance
-of considering task complexity and dataset characteristics when choosing the number of layers.
-Moreover, we discovered that HeUniform initialization outperformed GlorotUniform initialization in
-terms of both accuracy and loss. Surprisingly, the MLP architecture exhibited superior accuracy and
-lower loss than CNN on the MNIST dataset, which might be attributed to the small size of the images
-in the dataset.
-Through a comprehensive analysis of our experiments and relevant literature, we have gained valuable
-insights into designing efficient and effective Siamese Neural Networks for similarity-based tasks.
-Our results contribute to advancing the field of machine learning and provide a foundation for future
-research in this domain.
+The notebooks download MNIST automatically through TensorFlow/Keras.
 
-### References
-[1] Loris Nanni, Andrea Rigo, Alessandra Lumini, and Sheryl Brahnam. Spectrogram Classification
-Using Dissimilarity Space. Applied Sciences, 10(12), 4176, 2020.
+## Results
 
-[2] E. Ristani and C. Tomasi. Features for Multi-Target Multi-Camera Tracking and Re-Identification.
-arXiv preprint arXiv:1803.10859, 2018.
+The original study reported the following observations:
 
-[3] Yann, LeCun and Corinna, Cortes. MNIST handwritten digit database. http://yann.lecun.
-com/exdb/mnist/. Accessed on January, 2023.
+- A learning rate of `0.001` produced the strongest recorded average validation result, with approximately **89.70% validation accuracy** and **0.2953 validation loss**.
+- He initialization outperformed Glorot initialization in the documented comparisons.
+- CNN performance was similar across the tested six- and seven-layer configurations.
+- The seven-layer MLP slightly outperformed its six-layer version.
+- The MLP achieved higher recorded accuracy and lower loss than the CNN in this small-sample experiment.
+- Training accuracy remained higher than validation accuracy, indicating a generalization gap.
 
-[4] Martín Abadi, Ashish Agarwal, Paul Barham, Eugene Brevdo, Zhifeng Chen, Craig Citro, Greg S.
-Corrado, Andy Davis, Jeffrey Dean, Matthieu Devin, Sanjay Ghemawat, Ian Goodfellow, Andrew
-Harp, Geoffrey Irving, Michael Isard, Yangqing Jia, Rafal Jozefowicz, Lukasz Kaiser, Manjunath
-Kudlur, Josh Levenberg, Dandelion Mané, Rajat Monga, Sherry Moore, Derek Murray, Chris
-Olah, Mike Schuster, Jonathon Shlens, Benoit Steiner, Ilya Sutskever, Kunal Talwar, Paul Tucker,
-Vincent Vanhoucke, Vijay Vasudevan, Fernanda Viégas, Oriol Vinyals, Pete Warden, Martin
-Wattenberg, Martin Wicke, Yuan Yu, and Xiaoqiang Zheng. TensorFlow: Large-Scale Machine
-Learning on Heterogeneous Systems. https://www.tensorflow.org/. Software available
-from tensorflow.org, 2015.
+These are results from the documented experiment configuration, not universal conclusions about MLPs, CNNs, or Siamese networks.
 
-[5] DVL, Technical University of Munich. Siamese Neural Networks - Lecture Slides. Retrieved
-from https://dvl.in.tum.de/slides/adl4cv-ss20/2.Siamese.pdf.
+## Technology Stack
+
+| Area | Technology |
+| --- | --- |
+| Language | Python |
+| Deep learning | TensorFlow, Keras |
+| Dataset | MNIST |
+| Experiment environment | Jupyter Notebook |
+| Numerical processing | NumPy |
+| Visualization | Matplotlib |
+| Result storage | Microsoft Excel / openpyxl |
+
+## Limitations
+
+- Only 100 training images and 50 validation images are sampled from MNIST.
+- Sampling is random and the notebooks do not set a consistent NumPy seed for every experiment.
+- Cartesian pair generation scales quadratically and includes self-pairs.
+- Results are based on a single small benchmark and should not be generalized to complex similarity tasks.
+- The notebooks do not provide repeated runs, confidence intervals, or formal statistical significance tests.
+- MNIST images are not explicitly normalized in every experiment path.
+- The project is an academic architecture study, not a production verification system.
+
+## Academic Context
+
+This project was completed under the guidance of Prof. Dr.-Ing. Joeran Beel for the academic course **Recent Advancements in Machine Learning**.
